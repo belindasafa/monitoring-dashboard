@@ -1,0 +1,133 @@
+.rbk-wrapper {
+  padding: 24px 32px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.table-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.rbk-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rbk-table th {
+  text-align: left;
+  padding: 12px;
+  background: #f7f7f7;
+  font-size: 14px;
+}
+
+.rbk-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  background: #007bff;
+  color: white;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn.done {
+  background: #28a745 !important;
+}
+
+.btn.send {
+  background: #ff7a00;
+}
+
+.btn:disabled {
+  background: #ccc;
+  cursor: default;
+}
+
+/* ===================== MODAL ===================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.modal-box {
+  background: white;
+  padding: 24px;
+  width: 300px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.modal-item {
+  padding: 12px;
+  margin: 8px 0;
+  background: #f7f7f7;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-item:hover {
+  background: #ececec;
+}
+
+.btn-close {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #ddd;
+  border-radius: 8px;
+}
+
+.dropdown-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin: 15px 0;
+  font-size: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-save {
+  background: #28a745;
+  padding: 10px 16px;
+  color: white;
+  border-radius: 8px;
+}
+
+.btn-cancel {
+  background: #dc3545;
+  padding: 10px 16px;
+  color: white;
+  border-radius: 8px;
+}
