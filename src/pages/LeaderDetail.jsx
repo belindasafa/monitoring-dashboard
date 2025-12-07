@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { LeaderContext } from "../context/LeaderContext";
+import ProgressTracker from "../components/ProgressTracker";
 import "../styles/leaderDetail.css";
 
 export default function LeaderDetail() {
@@ -9,22 +10,27 @@ export default function LeaderDetail() {
   const navigate = useNavigate();
   const { users, updateStatus } = useContext(LeaderContext);
 
-  const user = users.find((u) => u.id === parseInt(id));
+  const [currentUser, setCurrentUser] = useState(null);
 
-  if (!user) return <h2>Data tidak ditemukan</h2>;
+  useEffect(() => {
+    const found = users.find(u => u.id === parseInt(id));
+    setCurrentUser(found);
+  }, [users, id]);
 
-  const handleApprove = () => {
-    updateStatus(user.id, "Approved");
+  if (!currentUser) return <h2>Loading...</h2>;
+
+  const approve = () => {
+    updateStatus(currentUser.id, "Approved");
 
     Swal.fire({
       icon: "success",
-      title: "Nasabah berhasil di-approve!",
+      title: "Berhasil Approve!",
       timer: 1500,
       showConfirmButton: false,
     });
   };
 
-  const handleReject = () => {
+  const reject = () => {
     Swal.fire({
       title: "Alasan Reject",
       input: "textarea",
@@ -32,7 +38,8 @@ export default function LeaderDetail() {
       confirmButtonText: "Submit",
     }).then((res) => {
       if (res.isConfirmed) {
-        updateStatus(user.id, "Rejected", res.value);
+        updateStatus(currentUser.id, "Rejected", res.value);
+
         Swal.fire({
           icon: "success",
           title: "Reject berhasil!",
@@ -44,35 +51,62 @@ export default function LeaderDetail() {
   };
 
   return (
-    <div className="detail-wrapper">
-      <button className="btn-back" onClick={() => navigate(-1)}>
-        ⬅ Kembali
-      </button>
+    <div className="detail-page">
+      <button className="btn-back" onClick={() => navigate(-1)}>⬅ Kembali</button>
 
-      <h2>Detail Nasabah</h2>
+      <h1 className="detail-title">Detail Nasabah</h1>
+      <h3 className="progress-title">Progress Pengajuan</h3>
+      <ProgressTracker
+        progress={currentUser.progress}
+        rejectedStep={currentUser.rejectedStep}
+      />
 
-      <div className="detail-card">
-        <p><strong>Nama:</strong> {user.name}</p>
-        <p><strong>NIK:</strong> {user.nik}</p>
-        <p><strong>Diasign Oleh:</strong> {user.assignedBy}</p>
+      <div className="detail-container">
+        <div className="detail-card">
+          <h2>Data Kredit</h2>
 
-        <hr />
+          <div className="detail-grid">
+            <div className="detail-row"><span className="detail-label">Nama:</span>
+              <span className="detail-value">{currentUser.name}</span></div>
 
-        <h3>Data Kredit</h3>
+            <div className="detail-row"><span className="detail-label">NIK:</span>
+              <span className="detail-value">{currentUser.nik}</span></div>
 
-        <p><strong>Penghasilan:</strong> Rp {user.income.toLocaleString()}</p>
-        <p><strong>Pekerjaan:</strong> {user.job}</p>
-        <p><strong>Lama Bekerja:</strong> {user.workLength} tahun</p>
-        <p><strong>Tanggungan:</strong> {user.dependents}</p>
-        <p><strong>Riwayat Kredit:</strong> {user.creditHistory}</p>
-        <p><strong>Outstanding Pinjaman:</strong> Rp {user.outstandingLoan.toLocaleString()}</p>
-        <p><strong>Saldo Tabungan:</strong> Rp {user.savingBalance.toLocaleString()}</p>
-        <p><strong>Skor Kredit:</strong> {user.creditScore}</p>
-        <p><strong>Rekomendasi Sistem:</strong> {user.systemRecommendation}</p>
+            <div className="detail-row"><span className="detail-label">Diasign Oleh:</span>
+              <span className="detail-value">{currentUser.assignedBy}</span></div>
 
-        <div className="detail-actions">
-          <button className="approve" onClick={handleApprove}>Approve</button>
-          <button className="reject" onClick={handleReject}>Reject</button>
+            <div className="detail-row"><span className="detail-label">Penghasilan:</span>
+              <span className="detail-value">Rp {currentUser.income.toLocaleString()}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Pekerjaan:</span>
+              <span className="detail-value">{currentUser.job}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Lama Bekerja:</span>
+              <span className="detail-value">{currentUser.workLength} tahun</span></div>
+
+            <div className="detail-row"><span className="detail-label">Tanggungan:</span>
+              <span className="detail-value">{currentUser.dependents}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Riwayat Kredit:</span>
+              <span className="detail-value">{currentUser.creditHistory}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Outstanding Pinjaman:</span>
+              <span className="detail-value">Rp {currentUser.outstandingLoan.toLocaleString()}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Saldo Tabungan:</span>
+              <span className="detail-value">Rp {currentUser.savingBalance.toLocaleString()}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Skor Kredit:</span>
+              <span className="detail-value">{currentUser.creditScore}</span></div>
+
+            <div className="detail-row"><span className="detail-label">Rekomendasi Sistem:</span>
+              <span className="detail-value">{currentUser.systemRecommendation}</span></div>
+          </div>
+
+          <div className="detail-actions">
+            <button className="approve" onClick={approve}>Approve</button>
+            <button className="reject" onClick={reject}>Reject</button>
+          </div>
         </div>
       </div>
     </div>

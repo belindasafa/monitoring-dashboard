@@ -16,12 +16,30 @@
   margin-bottom: 26px;
 }
 
+@media (max-width: 1100px) {
+  .metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .metric-card {
   padding: 20px;
   border-radius: 12px;
   font-weight: 600;
   text-align: center;
-  background: #e9ecef;   /* abu default */
+  background: #e9ecef;
 }
 
 .metric-card.blue { background: #2d6cdf; }
@@ -38,87 +56,32 @@
   padding: 20px;
   border-radius: 14px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+  overflow-x: auto;
 }
 
 .leader-table {
   width: 100%;
+  min-width: 750px;
   border-collapse: collapse;
 }
 
-.leader-table th, .leader-table td {
+.leader-table th,
+.leader-table td {
   padding: 12px;
   border-bottom: 1px solid #e6e6e6;
-}
-
-.btn-detail {
-  border: none !important;
-  outline: none !important;
-}
-
-.btn-detail {
-  background: #ff8800;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.status {
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-}
-
-.status.pending { background: #ffe08a; }
-.status.approved { background: #9cf29c; }
-.status.rejected { background: #ffb3b3; }
-
-/* MODAL */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  background: white;
-  padding: 24px;
-  border-radius: 14px;
-  width: 380px;
-}
-
-.btn-approve {
-  background: #28a745;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-}
-
-.btn-reject {
-  background: #d62828;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-}
-
-.btn-cancel {
-  background: gray;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
 }
 
 .top-actions {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .search-input {
-  width: 300px;
+  width: 280px;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -128,6 +91,15 @@
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    width: 100%;
+  }
+  .rows-select {
+    width: 100%;
+  }
 }
 
 .pagination {
@@ -150,12 +122,12 @@
 }
 
 .pagination button:hover {
-  background: #ffe2c4;         /* oranye muda */
+  background: #ffe2c4;
   border-color: #ff8800;
 }
 
 .pagination button.active {
-  background: #ff8800;         /* oranye BNI */
+  background: #ff8800;
   color: white;
   border-color: #ff8800;
   font-weight: 600;
@@ -171,4 +143,22 @@
   padding: 8px 12px;
   color: #666;
   font-weight: 600;
+}
+
+.status {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.status.pending { background: #ffe08a; }
+.status.approved { background: #9cf29c; }
+.status.rejected { background: #ffb3b3; }
+
+.btn-detail {
+  background: #ff8800;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
 }

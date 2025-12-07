@@ -1,0 +1,51 @@
+.tbl-card {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.09);
+  margin-top: 24px;
+}
+
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.tbl th {
+  background: #f8f8f8;
+  padding: 14px;
+  text-align: left;
+  border-bottom: 2px solid #eee;
+  font-weight: 600;
+}
+
+.tbl td {
+  padding: 14px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tag.pending { background: #FFF3B0; color: #8A6D00; }
+.tag.approved { background: #C8F7C5; color: #1F7A1F; }
+.tag.rejected { background: #F7C5C5; color: #B30000; }
+
+.btn-detail {
+  padding: 8px 14px;
+  background: #ff8800;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-detail:hover {
+  background: #e67600;
+}

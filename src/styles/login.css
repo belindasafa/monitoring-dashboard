@@ -1,0 +1,123 @@
+.login-bg {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(140deg, #FF9A25 , #f3b36b , #f1bf85 );
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.blob {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    background: rgba(255, 255, 255, 0.15);
+    filter: blur(100px);
+    border-radius: 50%;
+    animation: blobMove 12s infinite alternate;
+}
+
+.blob1 { top: -40px; left: -80px; }
+.blob2 { bottom: -50px; right: -60px; animation-delay: 2s; }
+
+@keyframes blobMove {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(40px, 30px) scale(1.2); }
+}
+
+.glass {
+    backdrop-filter: blur(22px);
+    background: rgba(255, 255, 255, 0.20);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.login-card {
+    width: 420px;
+    padding: 45px;
+    border-radius: 22px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+    animation: fadeIn 0.7s ease;
+}
+
+.login-logo {
+    width: 150px;
+    margin-bottom: 15px;
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 28px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.85);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.input-icon {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.input-group input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 15px;
+}
+
+.login-btn-new {
+    width: 100%;
+    padding: 14px;
+    background: #2C6482;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 4px 12px rgba(255,136,0,0.4);
+}
+
+.login-btn-new:hover {
+    background: #3683ac;
+    box-shadow: 0 6px 16px rgba(255,136,0,0.55);
+}
+
+.login-footer {
+    margin-top: 24px;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

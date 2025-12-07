@@ -1,25 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import Swal from "sweetalert2";
-import rbkUsersDummy from "../data/rbkUsers";
 import "../styles/rbk.css";
+import { LeaderContext } from "../context/LeaderContext";
 
 export default function RBKDashboard() {
-    const [users, setUsers] = useState(rbkUsersDummy);
+
+    const { users, updateStatus } = useContext(LeaderContext);
+
     const [openModal, setOpenModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedLeader, setSelectedLeader] = useState("");
 
+    const [search, setSearch] = useState("");
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const leaders = ["Pak Andi", "Bu Sari", "Pak Hendra", "Bu Putri"];
 
-    const updateStatus = (id, field) => {
-        setUsers((prev) =>
-            prev.map((u) => (u.id === id ? { ...u, [field]: true } : u))
+    const filteredUsers = useMemo(() => {
+        return users.filter(
+            u =>
+                u.name.toLowerCase().includes(search.toLowerCase()) ||
+                u.nik.includes(search)
         );
+    }, [search, users]);
+
+    const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+
+    const paginatedUsers = useMemo(() => {
+        const start = (currentPage - 1) * rowsPerPage;
+        return filteredUsers.slice(start, start + rowsPerPage);
+    }, [filteredUsers, currentPage, rowsPerPage]);
+
+
+    const getPageNumbers = () => {
+        const pages = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (currentPage > 4) pages.push("...");
+
+            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                if (i > 1 && i < totalPages) pages.push(i);
+            }
+
+            if (currentPage < totalPages - 3) pages.push("...");
+            pages.push(totalPages);
+        }
+        return pages;
+    };
+
+    const getStatusLabel = (u) => {
+        const { callVerif, sdmVerif, dukcapilVerif } = u.progress;
+
+        if (!callVerif && !sdmVerif && !dukcapilVerif)
+            return { text: "Belum Verifikasi", class: "status-none" };
+
+        if (callVerif && sdmVerif && dukcapilVerif)
+            return { text: "Complete", class: "status-complete" };
+
+        return { text: "Pending", class: "status-pending" };
+    };
+
+    const verifyField = (id, field) => {
+        updateStatus(id, field);
 
         const label = {
             callVerif: "Verifikasi Call User",
             sdmVerif: "Verifikasi SDM",
-            dukcapilVerif: "Verifikasi Dukcapil",
+            dukcapilVerif: "Verifikasi Dukcapil"
         };
 
         Swal.fire({
@@ -41,11 +91,7 @@ export default function RBKDashboard() {
             return;
         }
 
-        setUsers((prev) =>
-            prev.map((u) =>
-                u.id === selectedUser.id ? { ...u, sentToLeader: true } : u
-            )
-        );
+        updateStatus(selectedUser.id, "RBK Done", selectedLeader);
 
         Swal.fire({
             icon: "success",
@@ -62,6 +108,33 @@ export default function RBKDashboard() {
         <div className="rbk-wrapper">
             <h2 className="title">Dashboard RBK</h2>
 
+            <div className="rbk-controls">
+                <input
+                    type="text"
+                    placeholder="Cari Nama / NIK..."
+                    className="rbk-search"
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1);
+                    }}
+                />
+
+                <select
+                    className="rows-select"
+                    value={rowsPerPage}
+                    onChange={(e) => {
+                        setRowsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                    }}
+                >
+                    <option value={10}>10 / halaman</option>
+                    <option value={20}>20 / halaman</option>
+                    <option value={50}>50 / halaman</option>
+                    <option value={100}>100 / halaman</option>
+                </select>
+            </div>
+
             <div className="table-card">
                 <table className="rbk-table">
                     <thead>
@@ -69,6 +142,7 @@ export default function RBKDashboard() {
                             <th>ID</th>
                             <th>Nama</th>
                             <th>NIK</th>
+                            <th>Status Verifikasi</th>
                             <th>Verif Call</th>
                             <th>Verif SDM</th>
                             <th>Verif Dukcapil</th>
@@ -77,8 +151,12 @@ export default function RBKDashboard() {
                     </thead>
 
                     <tbody>
-                        {users.map((u) => {
-                            const allDone = u.callVerif && u.sdmVerif && u.dukcapilVerif;
+                        {paginatedUsers.map((u) => {
+                            const status = getStatusLabel(u);
+                            const done =
+                                u.progress.callVerif &&
+                                u.progress.sdmVerif &&
+                                u.progress.dukcapilVerif;
 
                             return (
                                 <tr key={u.id}>
@@ -87,45 +165,51 @@ export default function RBKDashboard() {
                                     <td>{u.nik}</td>
 
                                     <td>
+                                        <span className={`verif-status ${status.class}`}>
+                                            {status.text}
+                                        </span>
+                                    </td>
+
+                                    <td>
                                         <button
-                                            className={`btn ${u.callVerif ? "done" : ""}`}
-                                            onClick={() => updateStatus(u.id, "callVerif")}
-                                            disabled={u.callVerif}
+                                            className={`btn ${u.progress.callVerif ? "done" : ""}`}
+                                            onClick={() => verifyField(u.id, "callVerif")}
+                                            disabled={u.progress.callVerif}
                                         >
-                                            {u.callVerif ? "Selesai" : "Verif Call"}
+                                            {u.progress.callVerif ? "Selesai" : "Verif Call"}
                                         </button>
                                     </td>
 
                                     <td>
                                         <button
-                                            className={`btn ${u.sdmVerif ? "done" : ""}`}
-                                            onClick={() => updateStatus(u.id, "sdmVerif")}
-                                            disabled={u.sdmVerif}
+                                            className={`btn ${u.progress.sdmVerif ? "done" : ""}`}
+                                            onClick={() => verifyField(u.id, "sdmVerif")}
+                                            disabled={u.progress.sdmVerif}
                                         >
-                                            {u.sdmVerif ? "Selesai" : "Verif SDM"}
+                                            {u.progress.sdmVerif ? "Selesai" : "Verif SDM"}
                                         </button>
                                     </td>
 
                                     <td>
                                         <button
-                                            className={`btn ${u.dukcapilVerif ? "done" : ""}`}
-                                            onClick={() => updateStatus(u.id, "dukcapilVerif")}
-                                            disabled={u.dukcapilVerif}
+                                            className={`btn ${u.progress.dukcapilVerif ? "done" : ""}`}
+                                            onClick={() => verifyField(u.id, "dukcapilVerif")}
+                                            disabled={u.progress.dukcapilVerif}
                                         >
-                                            {u.dukcapilVerif ? "Selesai" : "Verif Dukcapil"}
+                                            {u.progress.dukcapilVerif ? "Selesai" : "Verif Dukcapil"}
                                         </button>
                                     </td>
 
                                     <td>
                                         <button
                                             className="btn send"
-                                            disabled={!allDone}
+                                            disabled={!done}
                                             onClick={() => {
                                                 setSelectedUser(u);
                                                 setOpenModal(true);
                                             }}
                                         >
-                                            {u.sentToLeader ? "Dikirim" : "Kirim"}
+                                            {u.progress.rbkVerif ? "Dikirim" : "Kirim"}
                                         </button>
                                     </td>
                                 </tr>
@@ -133,6 +217,36 @@ export default function RBKDashboard() {
                         })}
                     </tbody>
                 </table>
+
+                <div className="pagination">
+                    <button
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                    >
+                        Prev
+                    </button>
+
+                    {getPageNumbers().map((p, i) =>
+                        p === "..." ? (
+                            <span key={i} className="dots">...</span>
+                        ) : (
+                            <button
+                                key={i}
+                                className={currentPage === p ? "active" : ""}
+                                onClick={() => setCurrentPage(p)}
+                            >
+                                {p}
+                            </button>
+                        )
+                    )}
+
+                    <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
 
             {openModal && (

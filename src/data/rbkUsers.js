@@ -1,4 +1,3 @@
-// Helper generate NIK acak (16 digit)
 function randomNIK() {
   let nik = "";
   for (let i = 0; i < 16; i++) {
@@ -7,7 +6,6 @@ function randomNIK() {
   return nik;
 }
 
-// Random nama depan & belakang
 const firstNames = [
   "Budi", "Siti", "Agus", "Dewi", "Rina", "Fauzan", "Citra", "Andi", "Galih", "Salsa",
   "Maya", "Putri", "Rizky", "Fajar", "Dian", "Oktaviani", "Daniel", "Bagus", "Nanda", "Farhan"
@@ -18,7 +16,6 @@ const lastNames = [
  "Aulia", "Nugraha", "Lestari", "Mahendra", "Firmansyah", "Hidayat", "Ramadhan"
 ];
 
-// Generate 1000 dummy users
 const rbkUsers = Array.from({ length: 1000 }, (_, index) => {
   const first = firstNames[Math.floor(Math.random() * firstNames.length)];
   const last = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -31,6 +28,7 @@ const rbkUsers = Array.from({ length: 1000 }, (_, index) => {
     sdmVerif: false,
     dukcapilVerif: false,
     sentToLeader: false,
+    sales: sessionStorage.getItem("username") || "Sales A",
   };
 });
 
