@@ -85,7 +85,7 @@ export default function Topbar() {
                     </div>
 
                     <div className={`dropdown-menu ${openMenu ? "show" : ""}`}>
-                        <div className="dropdown-item">Profile</div>
+                        {/* <div className="dropdown-item">Profile</div> */}
                         <div className="dropdown-item logout" onClick={logout}>
                             Logout
                         </div>

@@ -67,11 +67,14 @@ export function LeaderProvider({ children }) {
                     updated.progress.sdmVerif &&
                     updated.progress.dukcapilVerif;
 
-                if (action === "RBK Done" || allRBKDone) {
+                if (action === "RBK Done") {
+
+                    updated.progress.callVerif = true;
+                    updated.progress.sdmVerif = true;
+                    updated.progress.dukcapilVerif = true;
 
                     updated.progress.rbkVerif = true;
                     updated.timeline.rbkVerifAt = new Date().toISOString();
-
                     updated.status = "Menunggu Approval Pemimpin";
 
                     pushNotif(
